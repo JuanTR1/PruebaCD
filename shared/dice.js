@@ -58,6 +58,47 @@ function ui(key) {
   return custom || (baseUi[lang()] && baseUi[lang()][key]) || baseUi.es[key];
 }
 
+
+function setText(selector, value) {
+  if (!value) return;
+  const el = document.querySelector(selector);
+  if (el) el.textContent = value;
+}
+
+function setHtml(selector, value) {
+  if (!value) return;
+  const el = document.querySelector(selector);
+  if (el) el.innerHTML = value;
+}
+
+function applyStaticUi() {
+  const active = config.ui && config.ui[lang()] ? config.ui[lang()] : null;
+  if (!active) return;
+  if (active.pageTitle) document.title = active.pageTitle;
+  setText('header .brand strong', active.brandTitle);
+  setText('header .brand small', active.brandSub);
+  setText('.back-link span', active.back);
+  const selector = document.querySelector('.language-picker select');
+  if (selector && active.languageLabel) selector.setAttribute('aria-label', active.languageLabel);
+  setText('.hero .eyebrow', active.eyebrow);
+  setHtml('.hero h1', active.title);
+  setText('.hero .intro', active.intro);
+  if (active.roll && rollButton) {
+    const icon = rollButton.querySelector('i');
+    rollButton.textContent = '';
+    if (icon) rollButton.appendChild(icon);
+    rollButton.append(' ' + active.roll);
+  }
+  const discover = document.querySelector('.discover');
+  if (discover && active.discover) discover.innerHTML = active.discover;
+  setText('.result small', active.resultKicker);
+  setText('.values .section-head .eyebrow', active.sixFaces);
+  setText('.values .section-head h2', active.valuesTitle);
+  setText('.values .section-head > p', active.valuesIntro);
+  setText('.closing blockquote', active.quote);
+  setText('.closing p', active.closingWords);
+}
+
 function faceData(i) {
   const face = config.faces[i];
   return {
@@ -185,6 +226,7 @@ function roll() {
 function changeLanguage() {
   document.documentElement.lang = visibleCode(language && language.selectedOptions[0] ? language.selectedOptions[0] : { textContent: lang() }) || lang();
   localStorage.setItem('livingPeaceSelectorLang', document.documentElement.lang);
+  applyStaticUi();
   updateCubeImages();
   showFace(current);
 }
