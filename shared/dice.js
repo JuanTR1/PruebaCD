@@ -26,6 +26,7 @@ const baseUi = {
   it: { action: 'LA TUA AZIONE', flip: 'Vedi sfida', back: 'Indietro' },
   fr: { action: 'TON ACTION', flip: 'Voir le défi', back: 'Retour' },
   pt: { action: 'SUA AÇÃO', flip: 'Ver desafio', back: 'Voltar' },
+  ar: { action: 'عملك اليوم', flip: 'عرض الرسالة', back: 'رجوع' },
   am: { action: 'TU ACCIÓN', flip: 'Ver reto', back: 'Volver' },
 };
 
