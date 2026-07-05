@@ -70,6 +70,7 @@ function faceData(i) {
 function updateCubeImages() {
   cube.querySelectorAll('img[data-face]').forEach(img => {
     img.src = faceData(Number(img.dataset.face)).image;
+    img.draggable = false;
   });
 }
 
@@ -87,11 +88,20 @@ function setCubeAngles(x, y, { resetDrag = true } = {}) {
   applyCubeTransform();
 }
 
+function commitDragOffset() {
+  baseX += dragX;
+  baseY += dragY;
+  dragX = 0;
+  dragY = 0;
+  applyCubeTransform();
+}
+
 function enableCubeDrag() {
   const target = cube.closest('.scene') || cube;
 
   target.addEventListener('pointerdown', event => {
     if (rollButton.disabled) return;
+    event.preventDefault();
     isDragging = true;
     startX = event.clientX;
     startY = event.clientY;
@@ -110,16 +120,19 @@ function enableCubeDrag() {
   function endDrag(event) {
     if (!isDragging) return;
     isDragging = false;
+    commitDragOffset();
     cube.style.transition = '';
     target.classList.remove('dragging');
     if (target.releasePointerCapture) target.releasePointerCapture(event.pointerId);
   }
 
+  target.addEventListener('dragstart', event => event.preventDefault());
   target.addEventListener('pointerup', endDrag);
   target.addEventListener('pointercancel', endDrag);
   target.addEventListener('lostpointercapture', () => {
     if (!isDragging) return;
     isDragging = false;
+    commitDragOffset();
     cube.style.transition = '';
     target.classList.remove('dragging');
   });

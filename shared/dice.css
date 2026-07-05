@@ -4,4 +4,5 @@
 
 .scene{cursor:grab;touch-action:none;user-select:none}
 .scene.dragging{cursor:grabbing}
+.cube-face img{-webkit-user-drag:none;user-select:none;pointer-events:none}
 

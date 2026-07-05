@@ -56,10 +56,17 @@ function setCubeRotation(rotation,{resetDrag=true}={}){
  applyCubeTransform();
 }
 
+function commitDragOffset(){
+ baseX+=dragX;baseY+=dragY;
+ dragX=0;dragY=0;
+ applyCubeTransform();
+}
+
 function enableCubeDrag(){
  const target=cube.closest('.scene')||cube;
  target.addEventListener('pointerdown',event=>{
   if(rollButton.disabled)return;
+  event.preventDefault();
   isDragging=true;startX=event.clientX;startY=event.clientY;
   cube.style.transition='transform .08s linear';
   target.classList.add('dragging');
@@ -73,13 +80,14 @@ function enableCubeDrag(){
  });
  function endDrag(event){
   if(!isDragging)return;
-  isDragging=false;cube.style.transition='';
+  isDragging=false;commitDragOffset();cube.style.transition='';
   target.classList.remove('dragging');
   if(target.releasePointerCapture)target.releasePointerCapture(event.pointerId);
  }
+ target.addEventListener('dragstart',event=>event.preventDefault());
  target.addEventListener('pointerup',endDrag);
  target.addEventListener('pointercancel',endDrag);
- target.addEventListener('lostpointercapture',()=>{if(isDragging){isDragging=false;cube.style.transition='';target.classList.remove('dragging')}});
+ target.addEventListener('lostpointercapture',()=>{if(isDragging){isDragging=false;commitDragOffset();cube.style.transition='';target.classList.remove('dragging')}});
 }
 
 function visibleCode(option){return(option.textContent||option.label||option.value||'').trim().slice(0,2).toLowerCase()}
@@ -125,7 +133,7 @@ function setLanguage(){
 }
 
 function updateCubeImages(lang){
- cube.querySelectorAll('img[data-face]').forEach(img=>{img.src=faceImage(Number(img.dataset.face),lang)});
+ cube.querySelectorAll('img[data-face]').forEach(img=>{img.src=faceImage(Number(img.dataset.face),lang);img.draggable=false});
 }
 
 setInitialLanguage();enableCubeDrag();rollButton.addEventListener('click',roll);language.addEventListener('change',setLanguage);setLanguage();
