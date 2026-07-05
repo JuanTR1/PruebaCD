@@ -1,13 +1,21 @@
 # Colección de dados · Living Peace Colombia
 
-Sitio estático con tres experiencias interactivas:
-
-- Dado de la Paz (multidioma)
-- Dado del juego ideal (español)
-- Dado ecológico (español)
+Sitio estático con una colección interactiva de Dados de la Paz.
 
 ## Publicación en GitHub Pages
 
-Sube a la raíz del repositorio `index.html`, `selector.css` y las carpetas `shared` y `dados`. En **Settings → Pages**, selecciona `Deploy from a branch`, la rama `main` y la carpeta `/ (root)`.
+El sitio debe publicarse desde la raíz del repositorio:
 
-No subas solamente el archivo ZIP: primero debes descomprimirlo.
+- `index.html`
+- `selector.css`
+- `assets/`
+- `dados/`
+- `shared/`
+
+En **Settings → Pages**, selecciona:
+
+- **Source:** Deploy from a branch
+- **Branch:** `main`
+- **Folder:** `/ (root)`
+
+El archivo `.nojekyll` se deja en la raíz para que GitHub Pages sirva los archivos estáticos tal cual.
