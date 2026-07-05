@@ -37,6 +37,50 @@ const resultDescription=document.querySelector('#resultDescription');
 const messageCard=document.querySelector('#messageCard');
 let current=0;
 const flippedCards=new Set();
+let baseX=-17,baseY=28,dragX=0,dragY=0,isDragging=false,startX=0,startY=0;
+
+function rotationAngles(rotation){
+ const x=Number((rotation.match(/rotateX\((-?\d+(?:\.\d+)?)deg\)/)||[])[1]||0);
+ const y=Number((rotation.match(/rotateY\((-?\d+(?:\.\d+)?)deg\)/)||[])[1]||0);
+ return{x,y};
+}
+
+function applyCubeTransform(){
+ cube.style.transform=`rotateX(${baseX+dragX}deg) rotateY(${baseY+dragY}deg)`;
+}
+
+function setCubeRotation(rotation,{resetDrag=true}={}){
+ const angles=rotationAngles(rotation);
+ baseX=angles.x;baseY=angles.y;
+ if(resetDrag){dragX=0;dragY=0}
+ applyCubeTransform();
+}
+
+function enableCubeDrag(){
+ const target=cube.closest('.scene')||cube;
+ target.addEventListener('pointerdown',event=>{
+  if(rollButton.disabled)return;
+  isDragging=true;startX=event.clientX;startY=event.clientY;
+  cube.style.transition='transform .08s linear';
+  target.classList.add('dragging');
+  if(target.setPointerCapture)target.setPointerCapture(event.pointerId);
+ });
+ target.addEventListener('pointermove',event=>{
+  if(!isDragging)return;
+  dragY=(event.clientX-startX)*.42;
+  dragX=-(event.clientY-startY)*.34;
+  applyCubeTransform();
+ });
+ function endDrag(event){
+  if(!isDragging)return;
+  isDragging=false;cube.style.transition='';
+  target.classList.remove('dragging');
+  if(target.releasePointerCapture)target.releasePointerCapture(event.pointerId);
+ }
+ target.addEventListener('pointerup',endDrag);
+ target.addEventListener('pointercancel',endDrag);
+ target.addEventListener('lostpointercapture',()=>{if(isDragging){isDragging=false;cube.style.transition='';target.classList.remove('dragging')}});
+}
 
 function visibleCode(option){return(option.textContent||option.label||option.value||'').trim().slice(0,2).toLowerCase()}
 function setInitialLanguage(){
@@ -54,7 +98,7 @@ function renderGrid(){
 
 function toggleCard(index){
  if(flippedCards.has(index))flippedCards.delete(index);else flippedCards.add(index);
- current=index;cube.style.transform=faces[index].rotation;showMessage(index);renderGrid();
+ current=index;setCubeRotation(faces[index].rotation);showMessage(index);renderGrid();
 }
 
 function showMessage(index){
@@ -64,12 +108,13 @@ function showMessage(index){
 }
 
 function selectFace(index,scroll=false){
- current=index;cube.style.transform=faces[index].rotation;showMessage(index);renderGrid();
+ current=index;setCubeRotation(faces[index].rotation);showMessage(index);renderGrid();
  if(scroll)document.querySelector('.experience').scrollIntoView({behavior:'smooth',block:'center'});
 }
 
 function roll(){
  rollButton.disabled=true;const next=Math.floor(Math.random()*faces.length);const x=720+Math.floor(Math.random()*3)*360;const y=720+Math.floor(Math.random()*3)*360;
+ dragX=0;dragY=0;
  cube.style.transform=`rotateX(${x}deg) rotateY(${y}deg)`;
  setTimeout(()=>{selectFace(next);rollButton.disabled=false},1050);
 }
@@ -83,4 +128,4 @@ function updateCubeImages(lang){
  cube.querySelectorAll('img[data-face]').forEach(img=>{img.src=faceImage(Number(img.dataset.face),lang)});
 }
 
-setInitialLanguage();rollButton.addEventListener('click',roll);language.addEventListener('change',setLanguage);setLanguage();
+setInitialLanguage();enableCubeDrag();rollButton.addEventListener('click',roll);language.addEventListener('change',setLanguage);setLanguage();
