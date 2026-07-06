@@ -133,11 +133,16 @@
       document.documentElement.lang=lang;
       const hero=document.querySelector('.intro');
       if(hero){
-        hero.querySelector('.eyebrow').textContent=text.eyebrow;
-        hero.querySelector('h1 span').textContent=text.titleLead;
-        hero.querySelector('h1 em').textContent=text.titleAccent;
-        hero.querySelector(':scope > p:not(.eyebrow):not(.peace-closing)').innerHTML=text.introRich||text.intro;
-        hero.querySelector('.peace-closing').textContent=text.peaceClosing;
+        const eyebrow=hero.querySelector('.eyebrow');
+        const titleLead=hero.querySelector('h1 span');
+        const titleAccent=hero.querySelector('h1 em');
+        const intro=hero.querySelector(':scope > p:not(.eyebrow):not(.peace-closing)');
+        const closing=hero.querySelector('.peace-closing');
+        if(eyebrow)eyebrow.textContent=text.eyebrow;
+        if(titleLead)titleLead.textContent=text.titleLead;
+        if(titleAccent)titleAccent.textContent=text.titleAccent;
+        if(intro)intro.innerHTML=text.introRich||text.intro;
+        if(closing)closing.textContent=text.peaceClosing;
         const paths=hero.querySelector('.peace-paths');
         if(paths&&text.paths)paths.innerHTML=text.paths.map(item=>`<li>${item}</li>`).join('');
       }
