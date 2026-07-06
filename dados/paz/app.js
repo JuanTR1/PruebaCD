@@ -38,6 +38,7 @@ const messageCard=document.querySelector('#messageCard');
 let current=0;
 const flippedCards=new Set();
 let baseX=-17,baseY=28,dragX=0,dragY=0,isDragging=false,startX=0,startY=0;
+const rollDuration=1250;
 
 function rotationAngles(rotation){
  const x=Number((rotation.match(/rotateX\((-?\d+(?:\.\d+)?)deg\)/)||[])[1]||0);
@@ -121,10 +122,14 @@ function selectFace(index,scroll=false){
 }
 
 function roll(){
- rollButton.disabled=true;const next=Math.floor(Math.random()*faces.length);const x=720+Math.floor(Math.random()*3)*360;const y=720+Math.floor(Math.random()*3)*360;
+ rollButton.disabled=true;const next=Math.floor(Math.random()*faces.length);const target=rotationAngles(faces[next].rotation);
+ const xTurns=3+Math.floor(Math.random()*2),yTurns=4+Math.floor(Math.random()*2);
+ const directionX=Math.random()>.5?1:-1,directionY=Math.random()>.5?1:-1;
+ const x=target.x+directionX*xTurns*360,y=target.y+directionY*yTurns*360;
  dragX=0;dragY=0;
+ cube.style.transition=`transform ${rollDuration}ms cubic-bezier(.2,.75,.25,1)`;
  cube.style.transform=`rotateX(${x}deg) rotateY(${y}deg)`;
- setTimeout(()=>{selectFace(next);rollButton.disabled=false},1050);
+ setTimeout(()=>{current=next;baseX=target.x;baseY=target.y;cube.style.transition='none';applyCubeTransform();cube.offsetHeight;cube.style.transition='';showMessage(next);renderGrid();rollButton.disabled=false},rollDuration);
 }
 
 function setLanguage(){

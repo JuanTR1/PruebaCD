@@ -19,6 +19,7 @@ let isDragging = false;
 let startX = 0;
 let startY = 0;
 const flipped = new Set();
+const rollDuration = 1250;
 
 const baseUi = {
   es: { action: 'TU ACCIÓN', flip: 'Ver reto', back: 'Volver' },
@@ -192,6 +193,11 @@ function renderCards() {
 function showFace(i) {
   current = i;
   setCubeAngles(...faceAngles[i]);
+  updateResult(i);
+  renderCards();
+}
+
+function updateResult(i) {
   result.classList.add('changing');
   setTimeout(() => {
     const data = faceData(i);
@@ -201,7 +207,6 @@ function showFace(i) {
     resultText.textContent = data.message;
     result.classList.remove('changing');
   }, 170);
-  renderCards();
 }
 
 function toggleCard(i) {
@@ -213,14 +218,28 @@ function roll() {
   rollButton.disabled = true;
   dragX = 0;
   dragY = 0;
-  const next = Math.floor(Math.random() * 6);
-  const x = 720 + Math.floor(Math.random() * 3) * 360;
-  const y = 720 + Math.floor(Math.random() * 3) * 360;
-  cube.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
+  const next = Math.floor(Math.random() * config.faces.length);
+  const [targetX, targetY] = faceAngles[next];
+  const xTurns = 3 + Math.floor(Math.random() * 2);
+  const yTurns = 4 + Math.floor(Math.random() * 2);
+  const directionX = Math.random() > 0.5 ? 1 : -1;
+  const directionY = Math.random() > 0.5 ? 1 : -1;
+  const spinX = targetX + directionX * xTurns * 360;
+  const spinY = targetY + directionY * yTurns * 360;
+  cube.style.transition = `transform ${rollDuration}ms cubic-bezier(.2,.75,.25,1)`;
+  cube.style.transform = `rotateX(${spinX}deg) rotateY(${spinY}deg)`;
   setTimeout(() => {
-    showFace(next);
+    current = next;
+    baseX = targetX;
+    baseY = targetY;
+    cube.style.transition = 'none';
+    applyCubeTransform();
+    cube.offsetHeight;
+    cube.style.transition = '';
+    updateResult(next);
+    renderCards();
     rollButton.disabled = false;
-  }, 1050);
+  }, rollDuration);
 }
 
 function changeLanguage() {
