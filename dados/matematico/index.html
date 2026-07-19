@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#fff2c7">
+  <title>Dado matemático para la Paz · Living Peace</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="../../assets/favicon.png">
+  <link rel="apple-touch-icon" href="../../assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/dice.css">
+  <style>:root{--cream:#fff2c7;--accent:#f0a51f;--accent-soft:#ffe1a6}</style>
+</head>
+<body>
+  <div class="orb a"></div>
+  <div class="orb b"></div>
+  <header>
+    <a class="brand" href="../../index.html">
+      <img class="brand-logo" src="../../assets/living-peace-logo.jpeg" alt="Living Peace International Colombia">
+      <span><strong>Dado matemático para la Paz</strong><small>Living Peace · Colombia</small></span>
+    </a>
+    <div class="header-actions"><a class="back-link" href="../../index.html">← <span>Volver a los dados</span></a></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">MATEMÁTICA · PARA LA PAZ</p>
+        <h1>Signos que suman.<em>Gestos que colorean la ciudad.</em></h1>
+        <p class="intro">Lanza el dado y descubre una operación concreta para multiplicar el amor, compartir, no dejar solo a nadie y construir fraternidad universal.</p>
+        <div class="actions"><button class="roll" id="rollButton"><i>⚄</i>Lanzar el dado</button><a class="discover" href="#valores">Conocer las seis caras ↓</a></div>
+      </div>
+      <div class="experience">
+        <div class="glow"></div>
+        <div class="scene">
+          <div class="cube" id="cube">
+            <div class="cube-face front"><img data-face="0" src="assets/es/face-1.png" alt=""></div>
+            <div class="cube-face back"><img data-face="4" src="assets/es/face-1.png" alt=""></div>
+            <div class="cube-face right"><img data-face="1" src="assets/es/face-1.png" alt=""></div>
+            <div class="cube-face left"><img data-face="2" src="assets/es/face-1.png" alt=""></div>
+            <div class="cube-face top"><img data-face="3" src="assets/es/face-1.png" alt=""></div>
+            <div class="cube-face bottom"><img data-face="5" src="assets/es/face-1.png" alt=""></div>
+          </div>
+        </div>
+        <article class="result" id="result" aria-live="polite">
+          <img id="resultImage" src="assets/es/face-1.png" alt="">
+          <div><small>TU OPERACIÓN DE PAZ</small><h2 id="resultTitle">Sumar fuerzas</h2><p id="resultText">Unamos nuestra fuerza a quienes comparten ideales de paz y elijamos por dónde comenzar a colorear la ciudad con amor.</p></div>
+        </article>
+      </div>
+    </section>
+    <section class="values" id="valores">
+      <div class="section-head">
+        <div><p class="eyebrow">LAS SEIS OPERACIONES</p><h2>Dado matemático para la Paz</h2></div>
+        <p>Pulsa una tarjeta para convertir cada signo matemático en una acción concreta de paz.</p>
+      </div>
+      <div class="grid" id="cardsGrid"></div>
+    </section>
+    <section class="closing">
+      <span>✦</span>
+      <blockquote>“Cuando sumamos, restamos soledad, multiplicamos amor y compartimos con todos, la ciudad se colorea de paz.”</blockquote>
+      <p>Sumar · Compartir · Multiplicar</p>
+    </section>
+  </main>
+  <footer><div><strong>Living Peace International</strong><p>Colombia</p></div><img class="footer-logo" src="../../assets/humanidad-cambio-uno.png" alt="Humanidad Cambio UNO"><div><a href="mailto:gen3colombia@gmail.com">gen3colombia@gmail.com</a><a href="tel:+573167125736">+57 316 712 5736</a><a href="tel:+573170343015">+57 317 034 3015</a></div></footer>
+  <script>
+    window.DICE_CONFIG={
+      "defaultLang":"es",
+      "ui":{"es":{"action":"TU OPERACIÓN","flip":"Ver acción","back":"Volver"}},
+      "faces":[
+        {"image":{"es":"assets/es/face-1.png"},"title":{"es":"Sumar fuerzas"},"short":{"es":"Unamos lo mejor de cada uno."},"message":{"es":"Busca a alguien con quien compartir ideales y elige una acción concreta para comenzar a colorear la ciudad con amor."}},
+        {"image":{"es":"assets/es/face-2.png"},"title":{"es":"Restar soledad"},"short":{"es":"No dejar solo a ninguno."},"message":{"es":"Acércate a quien está solo, pobre o marginado. Dona tiempo, escucha y compañía: también eso transforma la ciudad."}},
+        {"image":{"es":"assets/es/face-3.png"},"title":{"es":"Multiplicar el amor"},"short":{"es":"Ampliar la mirada hacia todos."},"message":{"es":"Mira a cada persona como alguien próximo para amar. Dialoga, descubre lo que los une y deja que otros también se contagien."}},
+        {"image":{"es":"assets/es/face-4.png"},"title":{"es":"Dividir y compartir"},"short":{"es":"Compartamos lo que tenemos y lo que somos."},"message":{"es":"Comparte bienes, alegría, tiempo y presencia. Que nadie llore solo ni celebre solo."}},
+        {"image":{"es":"assets/es/face-5.png"},"title":{"es":"Dar cien veces más"},"short":{"es":"Perdonar y seguir intentando."},"message":{"es":"Cuando el compromiso cueste, vuelve a empezar. Perdona, confía y haz tu parte sin limitar los objetivos de paz."}},
+        {"image":{"es":"assets/es/face-6.png"},"title":{"es":"Igualar en fraternidad"},"short":{"es":"Llegar juntos a la meta."},"message":{"es":"Construye fraternidad universal con pequeños gestos diarios. Nadie llega solo: todos somos necesarios para el mundo unido."}}
+      ]
+    };
+  </script>
+  <script src="../../shared/dice.js"></script>
+</body>
+</html>
