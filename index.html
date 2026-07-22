@@ -36,7 +36,7 @@
         <span class="card-copy"><small data-i18n="ecoTag">ECOLOGÍA · PARA LA PAZ</small><strong data-i18n="ecoTitle">Dado ecológico</strong><p data-i18n="ecoText">Cuidar la casa común como un camino concreto de paz.</p><b><span data-i18n="open">Abrir experiencia</span> <span>→</span></b></span>
       </a>
       <a class="dice-card game" href="dados/juego-ideal/index.html">
-        <span class="image-wrap video-preview"><img src="dados/juego-ideal/assets/jugar-con-todos.png" alt="Dado de la Paz para el juego ideal" data-i18n-alt="gameAlt"><video muted loop playsinline preload="none" poster="dados/juego-ideal/assets/jugar-con-todos.png" aria-hidden="true"><source data-src="https://videos.pexels.com/video-files/3978663/3978663-sd_640_360_24fps.mp4" type="video/mp4"></video><i data-i18n="multi">Multidioma</i></span>
+        <span class="image-wrap video-preview"><img src="dados/juego-ideal/assets/jugar-con-todos.png" alt="Dado de la Paz para el juego ideal" data-i18n-alt="gameAlt"><video muted loop playsinline preload="none" poster="dados/juego-ideal/assets/jugar-con-todos.png" aria-hidden="true"><source data-src="https://videos.pexels.com/video-files/5461333/5461333-sd_640_360_25fps.mp4" type="video/mp4"></video><i data-i18n="multi">Multidioma</i></span>
         <span class="card-copy"><small data-i18n="gameTag">JUEGO IDEAL · PARA LA PAZ</small><strong data-i18n="gameTitle">Dado del juego ideal</strong><p data-i18n="gameText">Jugar con alegría, incluir a todos y hacer del juego un espacio de paz.</p><b><span data-i18n="open">Abrir experiencia</span> <span>→</span></b></span>
       </a>
       <a class="dice-card family" href="dados/familias/index.html">
@@ -273,11 +273,11 @@
         if(!entry.isIntersecting)return;
         const video=entry.target;
         const source=video.querySelector('source[data-src]');
-        if(source&&!source.src){source.src=source.dataset.src;video.load()}
         video.addEventListener('canplay',()=>{
           video.classList.add('is-playing');
           video.play().catch(()=>{});
         },{once:true});
+        if(source&&!source.src){source.src=source.dataset.src;video.load()}
         observer.unobserve(video);
       }),{rootMargin:'220px'});
       videos.forEach(video=>observer.observe(video));
