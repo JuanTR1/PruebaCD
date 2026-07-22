@@ -36,6 +36,8 @@ header small{color:var(--muted);font-weight:700}
 .image-wrap{height:275px;display:block;position:relative;overflow:hidden;border-radius:20px;background:#eee}
 .image-wrap img{width:100%;height:100%;object-fit:cover;transition:opacity .38s ease,transform .55s ease;animation:preview-drift 7s ease-in-out infinite}
 .image-wrap img.preview-switching{opacity:.16;transform:scale(1.08)}
+.image-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s ease;pointer-events:none}
+.image-wrap video.is-playing{opacity:1}
 .dice-card:hover img{transform:scale(1.04)}
 .image-wrap i{position:absolute;right:12px;top:12px;background:rgba(255,255,255,.88);padding:7px 11px;border-radius:20px;font-size:11px;font-weight:800;font-style:normal}
 .card-copy{display:block;padding:24px 16px 15px}
@@ -90,5 +92,6 @@ footer a{color:var(--muted);text-decoration:none}
 
 @media(prefers-reduced-motion:reduce){
   .image-wrap img{animation:none;transition:none}
+  .image-wrap video{display:none}
   .dice-card,.peace-paths li{transition:none}
 }
