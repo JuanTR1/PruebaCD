@@ -248,6 +248,24 @@
     }
     const languageSelect=document.querySelector('#selectorLanguage');
     const baseHrefs=new Map([...document.querySelectorAll('.dice-card')].map(card=>[card,card.getAttribute('href')]));
+    // Las miniaturas con caras numeradas muestran distintas caras del dado, como un GIF ligero.
+    // Las demás conservan un movimiento suave definido en CSS.
+    function animateCardPreviews(){
+      document.querySelectorAll('.image-wrap img').forEach((image,index)=>{
+        const source=image.getAttribute('src')||'';
+        if(!/face-1\.(jpg|jpeg|png)$/i.test(source))return;
+        const frames=Array.from({length:6},(_,face)=>source.replace(/face-1\.(jpg|jpeg|png)$/i,`face-${face+1}.$1`));
+        frames.forEach(frame=>{const preload=new Image();preload.src=frame});
+        let current=0;
+        window.setTimeout(()=>window.setInterval(()=>{
+          current=(current+1)%frames.length;
+          image.classList.add('preview-switching');
+          window.setTimeout(()=>{image.src=frames[current]},180);
+          window.setTimeout(()=>image.classList.remove('preview-switching'),420);
+        },3600),index*155);
+      });
+    }
+    animateCardPreviews();
     function selectedLang(){return selectorTranslations[languageSelect.value]?languageSelect.value:'es'}
     function applySelectorLanguage(){
       const lang=selectedLang(),text=selectorTranslations[lang];
