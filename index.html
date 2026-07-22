@@ -248,20 +248,50 @@
     }
     const languageSelect=document.querySelector('#selectorLanguage');
     const baseHrefs=new Map([...document.querySelectorAll('.dice-card')].map(card=>[card,card.getAttribute('href')]));
+    const previewFiles=(dice,lang,names,extension='jpg')=>names.map(name=>`dados/${dice}/assets/${lang}/${name}.${extension}`);
+    const previewTranslations={
+      'dados/paz/index.html':Object.fromEntries(['en','pt','it','fr'].map(lang=>[lang,previewFiles('paz',lang,['amo-a-todos','amo-a-la-otra-persona','escucho-al-otro','soy-el-primero-en-amar','nos-perdonamos','nos-amamos-mutuamente'],'png')])),
+      'dados/ecologico/index.html':Object.fromEntries(['en','pt','it','fr'].map(lang=>[lang,previewFiles('ecologico',lang,['plantar-arboles','ahorrar-agua','ahorrar-energia','caminar-bicicleta','separar-residuos','tres-erres'])])),
+      'dados/juego-ideal/index.html':Object.fromEntries(['en','pt','it','fr'].map(lang=>[lang,previewFiles('juego-ideal',lang,['jugar-con-todos','hacer-amigos','equipo','alegria','alegrar-al-ganador','reglas'],'png')])),
+      'dados/familias/index.html':Object.fromEntries(['en','pt','it','fr'].map(lang=>[lang,previewFiles('familias',lang,['reavivar-amor-familiar','ser-sensibles','gestos-concretos','estar-atentos-vivencia','estar-atentos-tono','escuchar-sinceramente'])])),
+      'dados/proximidad/index.html':Object.fromEntries(['en','pt','it','fr'].map(lang=>[lang,previewFiles('proximidad',lang,['primer-paso','mirada-amor','corazon-otro','dolor-otro','no-pasar-vano','tiempo-otro'])])),
+      'dados/musica/index.html':Object.fromEntries(['en','pt','it','fr'].map(lang=>[lang,previewFiles('musica',lang,['instrumento-paz','melodia-paz','mejor-sinfonia','compas-armonia','calma-alma','melodias-corazones'])])),
+      'dados/etiopia/index.html':Object.fromEntries(['en','pt'].map(lang=>[lang,previewFiles('etiopia',lang,['amo-a-todos','amo-al-otro','escucha','primero-en-amar','perdon','amor-mutuo'])])),
+      'dados/interreligioso/index.html':{
+        en:previewFiles('interreligioso','en',['regla-oro','cristianismo','islam','judaismo','hinduismo','budismo']),
+        it:previewFiles('interreligioso','it',['regla-oro','cristianismo','islam','judaismo','hinduismo','budismo']),
+        pt:previewFiles('interreligioso','pt-v3',['regla-oro','cristianismo','islam','judaismo','hinduismo','budismo'])
+      },
+      'dados/deporte/index.html':{
+        es:previewFiles('deporte','es',['face-1','face-2','face-3','face-4','face-5','face-6'],'png'),
+        en:previewFiles('deporte','en',['face-1','face-2','face-3','face-4','face-5','face-6']),
+        pt:previewFiles('deporte','pt',['face-1','face-2','face-3','face-4','face-5','face-6']),
+        it:previewFiles('deporte','it',['face-1','face-2','face-3','face-4','face-5','face-6']),
+        fr:previewFiles('deporte','fr',['face-1','face-2','face-3','face-4','face-5','face-6'])
+      },
+      'dados/ingenieria/index.html':Object.fromEntries(['es','en','pt','it','fr'].map(lang=>[lang,previewFiles('ingenieria',lang,['face-1','face-2','face-3','face-4','face-5','face-6'])]))
+    };
     // Las miniaturas con caras numeradas muestran distintas caras del dado, como un GIF ligero.
     // Las demás conservan un movimiento suave definido en CSS.
     function animateCardPreviews(){
       document.querySelectorAll('.image-wrap img').forEach((image,index)=>{
         const source=image.getAttribute('src')||'';
         const manualFrames=image.closest('.image-wrap')?.dataset.preview?.split('|')||[];
+        const href=image.closest('.dice-card')?.getAttribute('href')?.split('?')[0];
         const numberedFrames=/face-1\.(jpg|jpeg|png)$/i.test(source)
           ?Array.from({length:6},(_,face)=>source.replace(/face-1\.(jpg|jpeg|png)$/i,`face-${face+1}.$1`))
           :[];
-        const frames=manualFrames.length>1?manualFrames:numberedFrames;
-        if(frames.length<2)return;
-        frames.forEach(frame=>{const preload=new Image();preload.src=frame});
+        const framesForLanguage=()=>{
+          const localizedFrames=previewTranslations[href]?.[selectedLang()]||[];
+          return localizedFrames.length>1?localizedFrames:manualFrames.length>1?manualFrames:numberedFrames;
+        };
+        const initialFrames=framesForLanguage();
+        if(initialFrames.length<2)return;
+        initialFrames.forEach(frame=>{const preload=new Image();preload.src=frame});
         let current=0;
         window.setTimeout(()=>window.setInterval(()=>{
+          const frames=framesForLanguage();
+          if(frames.length<2)return;
           current=(current+1)%frames.length;
           image.classList.add('preview-switching');
           window.setTimeout(()=>{image.src=frames[current]},180);
@@ -270,10 +300,18 @@
       });
     }
     animateCardPreviews();
+    function refreshAnimatedPreviews(){
+      document.querySelectorAll('.image-wrap img').forEach(image=>{
+        const href=image.closest('.dice-card')?.getAttribute('href')?.split('?')[0];
+        const frames=previewTranslations[href]?.[selectedLang()]||[];
+        if(frames.length>1)image.src=frames[0];
+      });
+    }
     function selectedLang(){return selectorTranslations[languageSelect.value]?languageSelect.value:'es'}
     function applySelectorLanguage(){
       const lang=selectedLang(),text=selectorTranslations[lang];
       document.documentElement.lang=lang;
+      refreshAnimatedPreviews();
       const hero=document.querySelector('.intro');
       if(hero){
         const eyebrow=hero.querySelector('.eyebrow');
